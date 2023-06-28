@@ -4,13 +4,15 @@ import TicketList from './TicketList';
 import Question1 from './Question1';
 import Question2 from './Question2';
 import Question3 from './Question3';
-
+//class component so we use methods not functions
 class TicketControl extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      count: 0
+      formVisibleOnPage: false,
+      count: 0,
+      mainTicketList: [] //adding mainTicketList to state so we can pass as a prop to TicketList
     };
   }
 
@@ -20,13 +22,19 @@ class TicketControl extends React.Component {
     }));
   };
   
+  handleAddingNewTicketToList = (newTicket) => {
+    const newMainTicketList = this.state.mainTicketList.concat(newTicket);
+    this.setState({mainTicketList: newMainTicketList,
+                  count: 0 });
+  }
+
   render() {
     let currentlyVisibleState = null;
     let buttonText = null;
   
     if (this.state.count === 0) {
-      currentlyVisibleState = <TicketList />;
-      buttonText = "Next Question";
+      currentlyVisibleState = <TicketList ticketList={this.state.mainTicketList} />;
+      buttonText = "Add Ticket";
     } else if (this.state.count === 1) {
       currentlyVisibleState = <Question1 />;
       buttonText = "Next Question";
@@ -37,8 +45,8 @@ class TicketControl extends React.Component {
       currentlyVisibleState = <Question3 />;
       buttonText = "Next Question";
     } else if (this.state.count === 4) {
-      currentlyVisibleState = <NewTicketForm />;
-      buttonText = "Add Ticket";
+      currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList} />;
+      buttonText = "Return to Ticket List";
     }
   
     return (
