@@ -14,7 +14,6 @@ function NewTicketForm(props){
       id: v4()
     });
   }
-
   return (
     <React.Fragment>
       <form onSubmit={handleNewTicketFormSubmission}>
